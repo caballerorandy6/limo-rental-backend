@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+// Vehicle model - Fleet management
+model Vehicle {
+  id                 String    @id @default(cuid())
+  name               String
+  quantityPassengers Int
+  quantityBaggage    Int
+  description        String    @db.Text
+  pricePerHour       Decimal   @db.Decimal(10, 2)
+  pricePerMile       Decimal   @db.Decimal(10, 2)
+  images             String[]
+  isActive           Boolean   @default(true)
+  bookings           Booking[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@map("vehicles")
+}
+
+// Service model - Service types
+model Service {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  description String?   @db.Text
+  image       String?
+  isActive    Boolean   @default(true)
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("services")
+}
+
+// Booking model - Reservations
+model Booking {
+  id                  String        @id @default(cuid())
+  bookingNumber       String        @unique
+  firstName           String
+  lastName            String
+  email               String
+  phone               String
+  pickUpLocation      String
+  dropOffLocation     String
+  stops               String[]      @default([])
+  dateOfService       DateTime
+  pickUpTime          String
+  roundTrip           Boolean       @default(false)
+  returnDate          DateTime?
+  returnTime          String?
+  typeOfService       String
+  passengers          Int
+  vehicleId           String
+  vehicle             Vehicle       @relation(fields: [vehicleId], references: [id])
+  serviceId           String?
+  service             Service?      @relation(fields: [serviceId], references: [id])
+  childSeat           Boolean       @default(false)
+  meetGreet           Boolean       @default(false)
+  champagne           Boolean       @default(false)
+  addOnsTotal         Decimal       @default(0) @db.Decimal(10, 2)
+  distance            Decimal?      @db.Decimal(10, 2)
+  duration            Int?
+  totalPrice          Decimal       @db.Decimal(10, 2)
+  specialInstructions String?       @db.Text
+  status              BookingStatus @default(PENDING)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+// Contact model - Contact form submissions
+model Contact {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  message   String?       @db.Text
+  status    ContactStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("contacts")
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}
