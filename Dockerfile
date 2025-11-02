@@ -48,13 +48,12 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 expressjs
 
-# Copy only production dependencies
+# Copy package files and Prisma schema FIRST
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
-
-# Copy Prisma schema and generate client
 COPY --chown=expressjs:nodejs prisma ./prisma/
-RUN npx prisma generate
+
+# Install production dependencies (postinstall will run prisma generate)
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Copy built application from builder
 COPY --from=builder --chown=expressjs:nodejs /app/dist ./dist
