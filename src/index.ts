@@ -36,12 +36,12 @@ app.get("/health", (req: Request, res: Response) => {
 // Ejemplo de estructura:
 import vehicleRoutes from "./routes/vehicle.routes";
 import bookingRoutes from "./routes/booking.routes";
-// import serviceRoutes from "./routes/service.routes";
+import serviceRoutes from "./routes/service.routes";
 // import contactRoutes from "./routes/contact.routes";
 
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/bookings", bookingRoutes);
-// app.use("/api/services", serviceRoutes);
+app.use("/api/services", serviceRoutes);
 // app.use("/api/contacts", contactRoutes);
 
 // 404 Handler

@@ -56,6 +56,7 @@ export class BookingService {
     return deleteBooking;
   }
 
+  // Get All Bookings By User
   async getAllBookingsByUser(userId: string) {
     const bookings = await prisma.booking.findMany({
       where: { userId },

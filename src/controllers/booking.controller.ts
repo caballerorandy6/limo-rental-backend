@@ -153,5 +153,16 @@ export class BookingController {
       res.status(500).json({ error: "Failed to delete booking" });
     }
   }
+
+  // Get All Bookings By User
+  async getAllBookingsByUser(req: Request, res: Response) {
+    try {
+      const userId = req.params.userId;
+      const bookings = await bookingService.getAllBookingsByUser(userId);
+      res.json(bookings);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve bookings" });
+    }
+  }
 }
 export default new BookingController();
