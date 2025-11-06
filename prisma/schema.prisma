@@ -47,6 +47,7 @@ model Service {
 model Booking {
   id                  String        @id @default(cuid())
   bookingNumber       String        @unique
+  userId              String?       // Clerk user ID (optional for guest bookings)
   firstName           String
   lastName            String
   email               String

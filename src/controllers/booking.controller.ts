@@ -3,6 +3,9 @@ import bookingService from "../services/booking.service";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 
+
+
+
 export class BookingController {
   // Get All Bookings
   async getAllBookings(req: Request, res: Response) {

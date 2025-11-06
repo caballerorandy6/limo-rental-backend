@@ -55,6 +55,15 @@ export class BookingService {
     });
     return deleteBooking;
   }
+
+  async getAllBookingsByUser(userId: string) {
+    const bookings = await prisma.booking.findMany({
+      where: { userId },
+      include: { vehicle: true, service: true },
+      orderBy: { createdAt: "desc" },
+    });
+    return bookings;
+  }
 }
 
 export default new BookingService();

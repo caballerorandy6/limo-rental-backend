@@ -16,8 +16,8 @@ router.get("/", requireAuth, requireAdmin, bookingController.getAllBookings);
 // GET /api/bookings/:id - Obtener una reservación por ID (usuario autenticado)
 router.get("/:id", requireAuth, bookingController.getBookingById);
 
-// POST /api/bookings - Crear nueva reservación (usuario autenticado)
-router.post("/", requireAuth, bookingController.createBooking);
+// POST /api/bookings - Crear nueva reservación (público - sin autenticación)
+router.post("/", bookingController.createBooking);
 
 // PUT /api/bookings/:id - Actualizar reservación (solo admin)
 router.put("/:id", requireAuth, requireAdmin, bookingController.updateBooking);
