@@ -51,8 +51,8 @@ export class BookingController {
       returnDate: z.coerce.date().optional().nullable(),
       returnTime: z.string().optional().nullable(),
 
-      // Service Details
-      typeOfService: z.string().min(1, "Type of service is required"),
+      // Trip & Service Details
+      tripTypeId: z.string().min(1, "Trip type is required"),
       passengers: z.number().int().positive("At least 1 passenger required"),
 
       // Vehicle & Service
@@ -89,7 +89,6 @@ export class BookingController {
         roundTrip: validatedData.roundTrip,
         returnDate: validatedData.returnDate,
         returnTime: validatedData.returnTime,
-        typeOfService: validatedData.typeOfService,
         passengers: validatedData.passengers,
         childSeat: validatedData.childSeat,
         meetGreet: validatedData.meetGreet,
@@ -101,6 +100,9 @@ export class BookingController {
         specialInstructions: validatedData.specialInstructions,
         vehicle: {
           connect: { id: validatedData.vehicleId },
+        },
+        tripType: {
+          connect: { id: validatedData.tripTypeId },
         },
         service: validatedData.serviceId
           ? {
