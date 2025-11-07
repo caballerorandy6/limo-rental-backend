@@ -1,8 +1,11 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const router = Router();
 const prisma = new PrismaClient();
+const execPromise = promisify(exec);
 
 // Trip Types data
 const tripTypes = [
@@ -34,7 +37,7 @@ const tripTypes = [
 ];
 
 // TEMPORARY ENDPOINT - DELETE AFTER USE
-router.post("/trip-types", async (req, res) => {
+router.post("/trip-types", async (_req, res) => {
   try {
     console.log("🌱 Seeding Trip Types...");
 
@@ -63,30 +66,31 @@ router.post("/trip-types", async (req, res) => {
 });
 
 // TEMPORARY ENDPOINT - DELETE AFTER USE
-router.post("/all", async (req, res) => {
+// Executes full seed: vehicles and services
+router.post("/all", async (_req, res) => {
   try {
-    console.log("🌱 Starting full seed...");
+    console.log("🌱 Starting full seed (vehicles + services)...");
 
-    // First seed trip types
-    for (const tripType of tripTypes) {
-      const existing = await prisma.tripType.findUnique({
-        where: { slug: tripType.slug },
-      });
-      if (!existing) {
-        await prisma.tripType.create({ data: tripType });
-      }
+    const { stdout, stderr } = await execPromise("npx ts-node prisma/seed.ts");
+
+    if (stderr) {
+      console.error("Stderr:", stderr);
     }
 
-    // Note: This won't create vehicles/services to avoid running the full seed
-    // Run the vehicles/services seed separately if needed
+    console.log("Stdout:", stdout);
 
     res.json({
       success: true,
-      message: "Database seeded successfully. Run vehicles/services seed if needed.",
+      message: "Vehicles and services seeded successfully",
+      output: stdout
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error seeding database:", error);
-    res.status(500).json({ success: false, error: "Failed to seed database" });
+    res.status(500).json({
+      success: false,
+      error: "Failed to seed database",
+      details: error.message
+    });
   }
 });
 
