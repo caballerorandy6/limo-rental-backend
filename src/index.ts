@@ -38,12 +38,14 @@ import vehicleRoutes from "./routes/vehicle.routes";
 import bookingRoutes from "./routes/booking.routes";
 import serviceRoutes from "./routes/service.routes";
 import tripTypeRoutes from "./routes/tripType.routes";
+import seedRoutes from "./routes/seed.routes"; // TEMPORARY - DELETE AFTER SEEDING
 // import contactRoutes from "./routes/contact.routes";
 
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/trip-types", tripTypeRoutes);
+app.use("/api/seed", seedRoutes); // TEMPORARY - DELETE AFTER SEEDING
 // app.use("/api/contacts", contactRoutes);
 
 // 404 Handler

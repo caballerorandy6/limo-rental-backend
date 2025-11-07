@@ -13,7 +13,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:push": "prisma db push",
-    "prisma:seed": "ts-node prisma/seed.ts",
+    "seed": "ts-node prisma/",
     "docker:dev": "docker compose up -d",
     "docker:dev:build": "docker compose up -d --build",
     "docker:dev:logs": "docker compose logs -f backend",
