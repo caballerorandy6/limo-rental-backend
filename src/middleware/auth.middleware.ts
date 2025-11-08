@@ -36,9 +36,12 @@ export const requireAuth = async (
   next: NextFunction
 ) => {
   try {
+    console.log("🔐 Auth middleware called");
     const authHeader = req.headers.authorization;
+    console.log("🔐 Auth header:", authHeader ? "✅ present" : "❌ missing");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.log("❌ No Bearer token");
       return res.status(401).json({
         error: "Unauthorized",
         message: "No authentication token provided",
@@ -46,13 +49,17 @@ export const requireAuth = async (
     }
 
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    console.log("🔐 Token extracted:", token.substring(0, 20) + "...");
 
     // Verificar el token con Clerk
+    console.log("🔐 Verifying token with Clerk...");
     const payload = await verifyToken(token, {
       secretKey: process.env.CLERK_SECRET_KEY!,
     });
+    console.log("🔐 Token verified, payload:", payload ? "✅" : "❌");
 
     if (!payload || !payload.sub) {
+      console.log("❌ Invalid payload");
       return res.status(401).json({
         error: "Unauthorized",
         message: "Invalid authentication token",
@@ -60,9 +67,12 @@ export const requireAuth = async (
     }
 
     // Obtener información del usuario desde Clerk
+    console.log("🔐 Fetching user from Clerk...");
     const user = await clerkClient.users.getUser(payload.sub);
+    console.log("🔐 User fetched:", user ? "✅" : "❌");
 
     if (!user) {
+      console.log("❌ User not found");
       return res.status(401).json({
         error: "Unauthorized",
         message: "User not found",
@@ -71,6 +81,7 @@ export const requireAuth = async (
 
     // Extraer el rol desde publicMetadata
     const role = (user.publicMetadata?.role as string) || "user";
+    console.log("🔐 User role:", role);
 
     // Adjuntar información del usuario al request
     req.auth = {
@@ -86,9 +97,10 @@ export const requireAuth = async (
       role: role,
     };
 
+    console.log("✅ Auth successful, proceeding to next middleware");
     next();
   } catch (error) {
-    console.error("Auth middleware error:", error);
+    console.error("❌ Auth middleware error:", error);
     return res.status(401).json({
       error: "Unauthorized",
       message: "Authentication failed",

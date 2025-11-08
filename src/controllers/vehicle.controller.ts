@@ -47,17 +47,31 @@ import { z } from "zod";
  */
 
 export class VehicleController {
-  // Get All Vehicles
+  // Get All Vehicles (Public) - Solo activos
   async getAllVehicles(req: Request, res: Response) {
     try {
       const vehicles = await vehicleService.getAllVehicles();
       res.json(vehicles);
     } catch (error) {
+      console.error("❌ Error in getAllVehicles:", error);
       res.status(500).json({ error: "Error trying to get vehicles" });
     }
   }
 
-  // Get Vehicle By ID
+  // Get All Vehicles (Admin) - Incluye inactivos
+  async getAllVehiclesAdmin(req: Request, res: Response) {
+    try {
+      console.log("🚗 getAllVehiclesAdmin called");
+      const vehicles = await vehicleService.getAllVehiclesAdmin();
+      console.log(`📊 Returning ${vehicles.length} vehicles`);
+      res.json(vehicles);
+    } catch (error) {
+      console.error("❌ Error in getAllVehiclesAdmin:", error);
+      res.status(500).json({ error: "Error trying to get vehicles" });
+    }
+  }
+
+  // Get Vehicle By ID (Public) - Solo si está activo
   async getVehicleById(req: Request, res: Response) {
     try {
       const vehicle = await vehicleService.getVehicleById(req.params.id);
@@ -66,6 +80,7 @@ export class VehicleController {
       }
       res.json(vehicle);
     } catch (error) {
+      console.error("❌ Error in getVehicleById:", error);
       res.status(500).json({ error: "Error trying to get vehicle" });
     }
   }
@@ -93,6 +108,7 @@ export class VehicleController {
           .status(400)
           .json({ error: "Validation failed", details: error.issues });
       } else {
+        console.error("❌ Error in createVehicle:", error);
         res.status(500).json({ error: "Error trying to create vehicle" });
       }
     }
@@ -123,6 +139,7 @@ export class VehicleController {
           .status(400)
           .json({ error: "Validation failed", details: error.issues });
       }
+      console.error("❌ Error in updateVehicle:", error);
       res.status(500).json({ error: "Error trying to update vehicle" });
     }
   }
@@ -130,9 +147,10 @@ export class VehicleController {
   // Delete Vehicle (Soft Delete)
   async deleteVehicle(req: Request, res: Response) {
     try {
-      const deletedVehicle = await vehicleService.deleteVehicle(req.params.id)
+      const deletedVehicle = await vehicleService.deleteVehicle(req.params.id);
       res.json(deletedVehicle);
     } catch (error) {
+      console.error("❌ Error in deleteVehicle:", error);
       res.status(500).json({ error: "Error trying to delete vehicle" });
     }
   }

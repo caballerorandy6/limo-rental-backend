@@ -13,6 +13,7 @@ export class BookingController {
       const bookings = await bookingService.getAllBookings();
       res.json(bookings);
     } catch (error) {
+      console.error("❌ Error in getAllBookings:", error);
       res.status(500).json({ error: "Failed to retrieve bookings" });
     }
   }
@@ -26,6 +27,7 @@ export class BookingController {
       }
       res.json(booking);
     } catch (error) {
+      console.error("❌ Error in getBookingById:", error);
       res.status(500).json({ error: "Failed to retrieve booking" });
     }
   }
@@ -116,6 +118,7 @@ export class BookingController {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: error.issues });
       }
+      console.error("❌ Error in createBooking:", error);
       res.status(500).json({ error: "Failed to create booking" });
     }
   }
@@ -142,6 +145,7 @@ export class BookingController {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: error.issues });
       }
+      console.error("❌ Error in updateBooking:", error);
       res.status(500).json({ error: "Failed to update booking" });
     }
   }
@@ -152,6 +156,7 @@ export class BookingController {
       const deletedBooking = await bookingService.deleteBooking(req.params.id);
       res.json(deletedBooking);
     } catch (error) {
+      console.error("❌ Error in deleteBooking:", error);
       res.status(500).json({ error: "Failed to delete booking" });
     }
   }
@@ -163,6 +168,7 @@ export class BookingController {
       const bookings = await bookingService.getAllBookingsByUser(userId);
       res.json(bookings);
     } catch (error) {
+      console.error("❌ Error in getAllBookingsByUser:", error);
       res.status(500).json({ error: "Failed to retrieve bookings" });
     }
   }

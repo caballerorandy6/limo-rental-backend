@@ -13,7 +13,17 @@ const router = Router();
 // GET /api/vehicles - Obtener todos los vehículos activos (público)
 router.get("/", vehicleController.getAllVehicles);
 
+// GET /api/vehicles/admin/all - Obtener todos los vehículos incluyendo inactivos (admin only)
+// IMPORTANTE: Esta ruta debe estar ANTES de /:id para que no sea interceptada
+router.get(
+  "/admin/all",
+  requireAuth,
+  requireAdmin,
+  vehicleController.getAllVehiclesAdmin
+);
+
 // GET /api/vehicles/:id - Obtener un vehículo por ID (público)
+// IMPORTANTE: Esta ruta con parámetro dinámico debe ir AL FINAL de los GET
 router.get("/:id", vehicleController.getVehicleById);
 
 // POST /api/vehicles - Crear un nuevo vehículo (solo admin)

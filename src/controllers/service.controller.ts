@@ -171,6 +171,13 @@ export class ServiceController {
 
     try {
       const validatedData = updateServiceSchema.parse(req.body);
+
+      // Verificar que el servicio exista
+      const existingService = await serviceService.getServiceByIdAdmin(req.params.id);
+      if (!existingService) {
+        return res.status(404).json({ message: "Service not found" });
+      }
+
       const updatedService = await serviceService.updateService(
         req.params.id,
         validatedData as Prisma.ServiceUpdateInput
@@ -193,6 +200,12 @@ export class ServiceController {
   // Delete Service - Soft Delete (Admin Only)
   async deleteService(req: Request, res: Response) {
     try {
+      // Verificar que el servicio exista
+      const existingService = await serviceService.getServiceByIdAdmin(req.params.id);
+      if (!existingService) {
+        return res.status(404).json({ message: "Service not found" });
+      }
+
       await serviceService.deleteService(req.params.id);
       return res.status(200).json({ message: "Service deleted successfully" });
     } catch (error) {

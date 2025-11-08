@@ -35,8 +35,21 @@ export class ServiceService {
     return services;
   }
 
-  // Get Service By ID - Con conteo de bookings
+  // Get Service By ID (Public) - Solo si está activo
   async getServiceById(id: string) {
+    const service = await prisma.service.findFirst({
+      where: { id, isActive: true },
+      include: {
+        _count: {
+          select: { bookings: true },
+        },
+      },
+    });
+    return service;
+  }
+
+  // Get Service By ID (Admin) - Incluye inactivos
+  async getServiceByIdAdmin(id: string) {
     const service = await prisma.service.findUnique({
       where: { id },
       include: {
@@ -48,10 +61,10 @@ export class ServiceService {
     return service;
   }
 
-  // Get Service By Slug - Con conteo de bookings
+  // Get Service By Slug (Public) - Solo si está activo
   async getServiceBySlug(slug: string) {
-    const service = await prisma.service.findUnique({
-      where: { slug },
+    const service = await prisma.service.findFirst({
+      where: { slug, isActive: true },
       include: {
         _count: {
           select: { bookings: true },

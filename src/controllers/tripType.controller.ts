@@ -138,7 +138,7 @@ class TripTypeController {
       const { id } = req.params;
       const validatedData = updateTripTypeSchema.parse(req.body);
 
-      const existingTripType = await tripTypeService.getTripTypeById(id);
+      const existingTripType = await tripTypeService.getTripTypeByIdAdmin(id);
       if (!existingTripType) {
         return res.status(404).json({ message: "Trip type not found" });
       }
@@ -183,7 +183,7 @@ class TripTypeController {
     try {
       const { id } = req.params;
 
-      const existingTripType = await tripTypeService.getTripTypeById(id);
+      const existingTripType = await tripTypeService.getTripTypeByIdAdmin(id);
       if (!existingTripType) {
         return res.status(404).json({ message: "Trip type not found" });
       }

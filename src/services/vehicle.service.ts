@@ -54,7 +54,7 @@ import { Prisma } from "@prisma/client";
  */
 
 export class VehicleService {
-  //getAllVehicles()
+  // Get All Vehicles (Public) - Solo vehículos activos
   async getAllVehicles() {
     const vehicles = await prisma.vehicle.findMany({
       where: { isActive: true },
@@ -63,10 +63,32 @@ export class VehicleService {
     return vehicles;
   }
 
+  // Get All Vehicles (Admin) - Incluye inactivos
+  async getAllVehiclesAdmin() {
+    const vehicles = await prisma.vehicle.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return vehicles;
+  }
+
+  // Get Vehicle By ID (Public) - Solo si está activo
   async getVehicleById(id: string) {
+    const vehicle = await prisma.vehicle.findFirst({
+      where: { id, isActive: true },
+    });
+    return vehicle;
+  }
+
+  // Get Vehicle By ID (Admin) - Incluye inactivos con bookings
+  async getVehicleByIdAdmin(id: string) {
     const vehicle = await prisma.vehicle.findUnique({
       where: { id },
-        include: { bookings: true },
+      include: {
+        bookings: true,
+        _count: {
+          select: { bookings: true },
+        },
+      },
     });
     return vehicle;
   }

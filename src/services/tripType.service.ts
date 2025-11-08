@@ -28,8 +28,21 @@ class TripTypeService {
     return tripTypes;
   }
 
-  // Get Trip Type by ID
+  // Get Trip Type by ID (Public) - Solo si está activo
   async getTripTypeById(id: string) {
+    const tripType = await prisma.tripType.findFirst({
+      where: { id, isActive: true },
+      include: {
+        _count: {
+          select: { bookings: true },
+        },
+      },
+    });
+    return tripType;
+  }
+
+  // Get Trip Type by ID (Admin) - Incluye inactivos
+  async getTripTypeByIdAdmin(id: string) {
     const tripType = await prisma.tripType.findUnique({
       where: { id },
       include: {
@@ -41,10 +54,10 @@ class TripTypeService {
     return tripType;
   }
 
-  // Get Trip Type by Slug
+  // Get Trip Type by Slug (Public) - Solo si está activo
   async getTripTypeBySlug(slug: string) {
-    const tripType = await prisma.tripType.findUnique({
-      where: { slug },
+    const tripType = await prisma.tripType.findFirst({
+      where: { slug, isActive: true },
       include: {
         _count: {
           select: { bookings: true },
