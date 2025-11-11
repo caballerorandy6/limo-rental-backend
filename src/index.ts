@@ -38,13 +38,13 @@ import vehicleRoutes from "./routes/vehicle.routes";
 import bookingRoutes from "./routes/booking.routes";
 import serviceRoutes from "./routes/service.routes";
 import tripTypeRoutes from "./routes/tripType.routes";
-// import contactRoutes from "./routes/contact.routes";
+import contactRoutes from "./routes/contact.routes";
 
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/trip-types", tripTypeRoutes);
-// app.use("/api/contacts", contactRoutes);
+app.use("/api/contacts", contactRoutes);
 
 // 404 Handler
 app.use((req: Request, res: Response) => {

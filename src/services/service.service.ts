@@ -1,25 +1,6 @@
 import prisma from "../utils/prisma";
 import { Prisma } from "@prisma/client";
 
-/**
- * SERVICE SERVICE
- *
- * TODO: Implementar los siguientes métodos:
- *
- * 1. getAllServices() - Obtener todos los servicios activos (where: { isActive: true })
- * 2. getServiceById(id: string) - Obtener un servicio por ID
- * 3. getServiceBySlug(slug: string) - Obtener un servicio por slug
- * 4. createService(data: Prisma.ServiceCreateInput) - Crear un nuevo servicio
- * 5. updateService(id: string, data: Prisma.ServiceUpdateInput) - Actualizar servicio
- * 6. deleteService(id: string) - Soft delete (isActive: false)
- * 7. getAllServicesAdmin() - Obtener todos los servicios (incluyendo inactivos) para admin
- *
- * Recuerda:
- * - Usar prisma.service para las operaciones
- * - Ordenar por createdAt: "desc"
- * - El delete es soft (solo cambiar isActive a false)
- */
-
 export class ServiceService {
   // Get All Services (Public) - Solo servicios activos con conteo de bookings
   async getAllServices() {

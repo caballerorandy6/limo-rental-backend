@@ -3,55 +3,6 @@ import serviceService from "../services/service.service";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
 
-/**
- * SERVICE CONTROLLER
- *
- * TODO: Implementar los siguientes controladores:
- *
- * PÚBLICOS (sin autenticación):
- * 1. getAllServices(req, res) - GET /api/services
- *    - Llamar serviceService.getAllServices()
- *    - Retornar status 200 con los servicios
- *
- * 2. getServiceById(req, res) - GET /api/services/:id
- *    - Obtener id de req.params
- *    - Llamar serviceService.getServiceById(id)
- *    - Si no existe, retornar 404
- *    - Retornar status 200 con el servicio
- *
- * 3. getServiceBySlug(req, res) - GET /api/services/slug/:slug
- *    - Obtener slug de req.params
- *    - Llamar serviceService.getServiceBySlug(slug)
- *    - Si no existe, retornar 404
- *    - Retornar status 200 con el servicio
- *
- * ADMIN ONLY (requieren autenticación + admin):
- * 4. createService(req, res) - POST /api/services
- *    - Obtener datos del req.body
- *    - Validar que no exista un servicio con el mismo slug
- *    - Llamar serviceService.createService(req.body)
- *    - Retornar status 201 con el servicio creado
- *
- * 5. updateService(req, res) - PUT /api/services/:id
- *    - Obtener id de req.params y datos de req.body
- *    - Llamar serviceService.updateService(id, req.body)
- *    - Retornar status 200 con el servicio actualizado
- *
- * 6. deleteService(req, res) - DELETE /api/services/:id
- *    - Obtener id de req.params
- *    - Llamar serviceService.deleteService(id)
- *    - Retornar status 200 con mensaje de éxito
- *
- * 7. getAllServicesAdmin(req, res) - GET /api/services/admin/all
- *    - Llamar serviceService.getAllServicesAdmin()
- *    - Retornar status 200 con todos los servicios
- *
- * Recuerda:
- * - Manejar errores con try/catch
- * - Retornar mensajes claros en caso de error
- * - Usar los status codes apropiados
- */
-
 export class ServiceController {
   // Get All Services (Public)
   async getAllServices(req: Request, res: Response) {
