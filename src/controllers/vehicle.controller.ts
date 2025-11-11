@@ -61,9 +61,7 @@ export class VehicleController {
   // Get All Vehicles (Admin) - Incluye inactivos
   async getAllVehiclesAdmin(req: Request, res: Response) {
     try {
-      console.log("🚗 getAllVehiclesAdmin called");
       const vehicles = await vehicleService.getAllVehiclesAdmin();
-      console.log(`📊 Returning ${vehicles.length} vehicles`);
       res.json(vehicles);
     } catch (error) {
       console.error("❌ Error in getAllVehiclesAdmin:", error);
